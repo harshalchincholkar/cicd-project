@@ -1,21 +1,20 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 18.20.5
-   
+  pre_build:
     commands:
-        - npm install
-       
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 213936281972.dkr.ecr.eu-north-1.amazonaws.com
+
   build:
     commands:
-        # run build script
-        - npm run build
+      - echo Build started
+      - docker build -t $ImageName .
+      - docker tag $ImageName:latest 213936281972.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
 
   post_build:
     commands:
-      - chmod +x scripts/*.sh
+      - docker push 213936281972.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
      
 artifacts:
   # include all files required to run the application

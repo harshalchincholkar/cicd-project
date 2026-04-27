@@ -8,14 +8,14 @@ phases:
       - echo Logging in to ECR
       - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 213936281972.dkr.ecr.eu-north-1.amazonaws.com
 
-  build:
-    commands:
-      - echo Build started
-      - echo ImageName=$ImageName
-      - ls -l
-      - docker build -t $ImageName -f AWSCiCdPractical-main/Dockerfile
-      - docker images   # 🔥 DEBUG (VERY IMPORTANT)
-      - docker tag $ImageName:latest 213936281972.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
+build:
+  commands:
+    - echo Build started
+    - echo ImageName=$ImageName
+    - ls -l
+    - docker build -t $ImageName -f AWSCiCdPractical-main/Dockerfile AWSCiCdPractical-main/
+    - docker images
+    - docker tag $ImageName:latest 213936281972.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
 
   post_build:
     commands:
